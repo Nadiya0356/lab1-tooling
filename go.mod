@@ -1,6 +1,6 @@
 module github.com/Nadiya0356/lab1-tooling
 
-go 1.21.1
+go 1.23.1
 
 require (
 	github.com/rs/zerolog v1.35.0
