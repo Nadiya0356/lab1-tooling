@@ -16,30 +16,33 @@ func main() {
 	// 🔹 конфіг
 	viper.SetConfigFile("config.yaml")
 
-	err := viper.ReadInConfig()
-	if err != nil {
-		logger.Error().Err(err).Msg("Config error")
+	if err := viper.ReadInConfig(); err != nil {
+		logger.Error().Err(err).Msg("Failed to read config")
 		return
 	}
 
 	appName := viper.GetString("app_name")
 	port := viper.GetInt("port")
 
-	logger.Info().Msg("App started")
+	logger.Info().
+		Str("app", appName).
+		Int("port", port).
+		Msg("Application started")
 
-	// 🔹 твій код з лаби 1
-	fmt.Println("App:", appName)
-	fmt.Println("Port:", port)
-
-	fmt.Println("Add:", internal.Add(5, 3))
+	// 🔹 логіка з лаби 1
+	sum := internal.Add(5, 3)
+	fmt.Println("Add:", sum)
 
 	result, err := internal.Divide(10, 2)
 	if err != nil {
 		logger.Error().Err(err).Msg("Divide error")
-	} else {
-		fmt.Println("Divide:", result)
+		return
 	}
 
-	// оброблена помилка
-	_, _ = internal.Divide(5, 0)
+	fmt.Println("Divide:", result)
+
+	// обробка помилки
+	if _, err := internal.Divide(5, 0); err != nil {
+		logger.Warn().Err(err).Msg("Handled division by zero")
+	}
 }
